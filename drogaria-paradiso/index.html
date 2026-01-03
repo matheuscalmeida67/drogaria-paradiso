@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drogaria Paradiso - Sua farmácia de bairro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset e estilos gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #B22222; /* Vermelho sangue */
+            --primary-dark: #8B0000; /* Vermelho escuro */
+            --secondary: #FFD700; /* Amarelo ouro */
+            --light: #FFFFFF; /* Branco */
+            --dark: #FFFFFF; /* Branco para textos */
+            --gray: #F0F0F0; /* Cinza claro */
+            --light-gray: #D3D3D3; /* Cinza médio */
+            --border-radius: 8px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        body {
+            background-color: var(--primary);
+            color: var(--light);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        section {
+            padding: 30px 0;
+        }
+        
+        h1, h2, h3 {
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            border-left: 4px solid var(--secondary);
+            padding-left: 10px;
+        }
+        
+        h3 {
+            font-size: 1.3rem;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            color: var(--light);
+        }
+        
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--primary-dark);
+            color: var(--light);
+            padding: 15px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 1.8rem;
+            color: var(--secondary);
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            color: var(--light);
+        }
+        
+        .cart-icon {
+            position: relative;
+            font-size: 1.5rem;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--secondary);
+            color: var(--primary-dark);
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        /* Categorias */
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .category-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .category-btn.active {
+            background-color: var(--secondary);
+            color: var(--primary-dark);
+            font-weight: bold;
+        }
+        
+        .category-btn:hover {
+            background-color: var(--secondary);
+            color: var(--primary-dark);
+        }
+        
+        /* Produtos */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .product-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-img {
+            height: 180px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            padding: 15px;
+        }
+        
+        .product-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: var(--light);
+        }
+        
+        .product-price {
+            color: var(--secondary);
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .add-to-cart {
+            background-color: var(--secondary);
+            color: var(--primary-dark);
+            padding: 10px 15px;
+            width: 100%;
+            font-weight: 600;
+        }
+        
+        .add-to-cart:hover {
+            background-color: #FFC107;
+        }
+        
+        /* Modal do carrinho */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: var(--primary);
+            margin: 50px auto;
+            width: 95%;
+            max-width: 500px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .modal-header {
+            background-color: var(--primary-dark);
+            color: var(--light);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            color: var(--light);
+            margin: 0;
+        }
+        
+        .close-modal {
+            background: none;
+            color: var(--light);
+            font-size: 1.5rem;
+        }
+        
+        .modal-body {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .cart-items {
+            margin-bottom: 20px;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .cart-item-info h4 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+            color: var(--light);
+        }
+        
+        .cart-item-price {
+            color: var(--secondary);
+            font-weight: bold;
+        }
+        
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .cart-item-controls button {
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--light);
+            font-weight: bold;
+        }
+        
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 15px 0;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            color: var(--light);
+        }
+        
+        .modal-footer {
+            padding: 0 20px 20px;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary);
+            color: var(--primary-dark);
+        }
+        
+        .btn-primary:hover {
+            background-color: #FFC107;
+        }
+        
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--light);
+            margin-top: 10px;
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Formulários */
+        .form-section {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--light);
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+        
+        .form-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .form-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .form-option.selected {
+            border-color: var(--secondary);
+            background-color: rgba(255, 215, 0, 0.1);
+        }
+        
+        .form-option input {
+            width: auto;
+        }
+        
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .payment-method {
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-method.selected {
+            border-color: var(--secondary);
+            background-color: rgba(255, 215, 0, 0.1);
+        }
+        
+        .payment-method i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        
+        .payment-method div {
+            color: var(--light);
+        }
+        
+        .payment-info {
+            background-color: rgba(255, 215, 0, 0.1);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            display: none;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .payment-info.show {
+            display: block;
+        }
+        
+        .payment-info h4 {
+            color: var(--secondary);
+        }
+        
+        .pix-key {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            word-break: break-all;
+            color: var(--light);
+            letter-spacing: 1px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--primary-dark);
+            color: var(--light);
+            padding: 30px 0;
+            margin-top: 40px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .footer-section h3 {
+            color: var(--secondary);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .footer-section p {
+            color: var(--light);
+        }
+        
+        .contact-info {
+            list-style: none;
+        }
+        
+        .contact-info li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--light);
+        }
+        
+        /* Pop-up fixo para concluir pedido */
+        .fixed-checkout-popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--secondary);
+            color: var(--primary-dark);
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 999;
+            display: none;
+            align-items: center;
+            gap: 15px;
+            font-weight: bold;
+            animation: slideInRight 0.5s ease;
+            max-width: 350px;
+        }
+        
+        .fixed-checkout-popup.show {
+            display: flex;
+        }
+        
+        .fixed-checkout-popup button {
+            background-color: var(--primary-dark);
+            color: var(--light);
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        .fixed-checkout-popup button:hover {
+            background-color: #6B0000;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        /* Notificação centralizada */
+        .centered-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--secondary);
+            color: var(--primary-dark);
+            padding: 20px 30px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+            font-weight: bold;
+            text-align: center;
+            max-width: 300px;
+            border: 2px solid var(--primary-dark);
+        }
+        
+        /* Responsividade */
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+            
+            .form-options {
+                flex-direction: row;
+            }
+            
+            .form-option {
+                flex: 1;
+            }
+            
+            .modal-content {
+                margin: 80px auto;
+            }
+            
+            .fixed-checkout-popup {
+                bottom: 30px;
+                right: 30px;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+            
+            .product-img {
+                height: 140px;
+            }
+            
+            .modal-content {
+                margin: 30px auto;
+                width: 95%;
+            }
+            
+            .fixed-checkout-popup {
+                bottom: 15px;
+                right: 15px;
+                left: 15px;
+                max-width: none;
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .centered-notification {
+                width: 90%;
+                max-width: 280px;
+                padding: 15px 20px;
+            }
+        }
+        
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .slide-up {
+            animation: slideUp 0.5s ease;
+        }
+        
+        /* Status do pedido */
+        .status-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--light);
+        }
+        
+        .step-icon.active {
+            background-color: var(--secondary);
+            color: var(--primary-dark);
+        }
+        
+        .step-text {
+            flex: 1;
+        }
+        
+        .step-text strong {
+            color: var(--light);
+        }
+        
+        .step-text small {
+            color: var(--light);
+            opacity: 0.8;
+        }
+        
+        /* Troco */
+        .change-info {
+            background-color: rgba(255, 215, 0, 0.1);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 15px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .change-info p {
+            margin-bottom: 5px;
+        }
+        
+        .change-amount {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        
+        /* Placeholders com cor branca */
+        ::placeholder {
+            color: rgba(255, 255, 255, 0.7) !important;
+            opacity: 1;
+        }
+        
+        :-ms-input-placeholder {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+        
+        ::-ms-input-placeholder {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-prescription-bottle-alt"></i>
+                <h1>Drogaria Paradiso</h1>
+            </div>
+            <div class="cart-icon" id="cartIcon">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Pop-up fixo para concluir pedido -->
+    <div class="fixed-checkout-popup" id="fixedCheckoutPopup">
+        <div>
+            <i class="fas fa-shopping-cart"></i>
+            Conclua o pedido clicando aqui ou continue adicionando itens
+        </div>
+        <button id="checkoutFixedBtn">Finalizar Pedido</button>
+    </div>
+
+    <!-- Seção de produtos -->
+    <section id="products">
+        <div class="container">
+            <h2>Nossos Produtos</h2>
+            
+            <!-- Categorias -->
+            <div class="categories" id="categoriesContainer">
+                <!-- As categorias serão geradas por JavaScript -->
+            </div>
+            
+            <div class="products-grid" id="productsGrid">
+                <!-- Produtos serão carregados via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal do carrinho -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content fade-in">
+            <div class="modal-header">
+                <h3>Seu Carrinho</h3>
+                <button class="close-modal" id="closeCartModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="cart-items" id="cartItems">
+                    <!-- Itens do carrinho serão inseridos aqui -->
+                </div>
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cartTotal">R$ 0,00</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="checkoutBtn">Finalizar Compra</button>
+                <button class="btn btn-secondary" id="continueShoppingBtn">Continuar Comprando</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de checkout (etapas do pedido) -->
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content fade-in">
+            <div class="modal-header">
+                <h3>Finalizar Pedido</h3>
+                <button class="close-modal" id="closeCheckoutModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Indicador de etapas -->
+                <div class="status-step">
+                    <div class="step-icon active" id="step1Icon">1</div>
+                    <div class="step-text">
+                        <strong>Informações de Entrega</strong>
+                        <small>Preencha seus dados</small>
+                    </div>
+                </div>
+                
+                <div class="status-step">
+                    <div class="step-icon" id="step2Icon">2</div>
+                    <div class="step-text">
+                        <strong>Forma de Pagamento</strong>
+                        <small>Escolha como pagar</small>
+                    </div>
+                </div>
+                
+                <div class="status-step">
+                    <div class="step-icon" id="step3Icon">3</div>
+                    <div class="step-text">
+                        <strong>Confirmação</strong>
+                        <small>Revise e finalize</small>
+                    </div>
+                </div>
+                
+                <!-- Formulário de entrega -->
+                <div id="deliveryForm" class="slide-up">
+                    <div class="form-section">
+                        <h3>Onde será a entrega?</h3>
+                        <div class="form-options">
+                            <div class="form-option" id="paradisoOption">
+                                <input type="radio" name="deliveryOption" id="paradiso" value="paradiso">
+                                <label for="paradiso">Condomínio Paradiso</label>
+                            </div>
+                            <div class="form-option" id="otherOption">
+                                <input type="radio" name="deliveryOption" id="other" value="other">
+                                <label for="other">Outro Bairro</label>
+                            </div>
+                        </div>
+                        
+                        <!-- Formulário para Condomínio Paradiso -->
+                        <div id="paradisoForm" style="display: none;">
+                            <div class="form-group">
+                                <label for="paradisoName">Nome Completo *</label>
+                                <input type="text" id="paradisoName" placeholder="Seu nome completo">
+                            </div>
+                            <div class="form-group">
+                                <label for="paradisoPhone">Celular com DDD *</label>
+                                <input type="tel" id="paradisoPhone" placeholder="(11) 99999-9999">
+                            </div>
+                            <div class="form-group">
+                                <label for="paradisoGarden">Jardim *</label>
+                                <input type="text" id="paradisoGarden" placeholder="Ex: 01">
+                            </div>
+                            <div class="form-group">
+                                <label for="paradisoHouse">Casa *</label>
+                                <input type="text" id="paradisoHouse" placeholder="Ex: 01">
+                            </div>
+                        </div>
+                        
+                        <!-- Formulário para Outro Bairro -->
+                        <div id="otherForm" style="display: none;">
+                            <div class="form-group">
+                                <label for="otherName">Nome Completo *</label>
+                                <input type="text" id="otherName" placeholder="Seu nome completo">
+                            </div>
+                            <div class="form-group">
+                                <label for="otherPhone">Celular com DDD *</label>
+                                <input type="tel" id="otherPhone" placeholder="(11) 99999-9999">
+                            </div>
+                            <div class="form-group">
+                                <label for="otherStreet">Rua *</label>
+                                <input type="text" id="otherStreet" placeholder="Nome da rua">
+                            </div>
+                            <div class="form-group">
+                                <label for="otherNumber">Número *</label>
+                                <input type="text" id="otherNumber" placeholder="Número da residência">
+                            </div>
+                            <div class="form-group">
+                                <label for="otherNeighborhood">Bairro *</label>
+                                <input type="text" id="otherNeighborhood" placeholder="Nome do bairro">
+                            </div>
+                            <div class="form-group">
+                                <label for="otherComplement">Complemento</label>
+                                <input type="text" id="otherComplement" placeholder="Apto, bloco, etc.">
+                            </div>
+                            <div class="form-group">
+                                <label for="otherReference">Ponto de Referência</label>
+                                <input type="text" id="otherReference" placeholder="Próximo a...">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="nextToPaymentBtn">Continuar para Pagamento</button>
+                </div>
+                
+                <!-- Formulário de pagamento -->
+                <div id="paymentForm" style="display: none;">
+                    <div class="form-section">
+                        <h3>Forma de Pagamento</h3>
+                        <p>Todas as formas de pagamento são realizadas na entrega.</p>
+                        
+                        <div class="payment-methods">
+                            <div class="payment-method" id="cashOption">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <div>Dinheiro</div>
+                            </div>
+                            <div class="payment-method" id="pixOption">
+                                <i class="fas fa-qrcode"></i>
+                                <div>PIX</div>
+                            </div>
+                            <div class="payment-method" id="debitOption">
+                                <i class="fas fa-credit-card"></i>
+                                <div>Cartão Débito</div>
+                            </div>
+                            <div class="payment-method" id="creditOption">
+                                <i class="far fa-credit-card"></i>
+                                <div>Cartão Crédito</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Informações específicas de cada forma de pagamento -->
+                        <div class="payment-info" id="cashInfo">
+                            <h4>Pagamento em Dinheiro</h4>
+                            <p>Total do pedido: <strong id="totalAmount">R$ 0,00</strong></p>
+                            <div class="form-group">
+                                <label for="amountPaid">Valor que será pago *</label>
+                                <input type="number" id="amountPaid" placeholder="Digite o valor em reais" min="0" step="0.01">
+                            </div>
+                            <div class="change-info" id="changeInfo" style="display: none;">
+                                <p>Troco a ser dado:</p>
+                                <div class="change-amount" id="changeAmount">R$ 0,00</div>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-info" id="pixInfo">
+                            <h4>Pagamento com PIX</h4>
+                            <p>Utilize a chave PIX abaixo para o pagamento:</p>
+                            <div class="pix-key">XX XXXXX-XXXX</div>
+                            <p>Após o pagamento, nos envie o comprovante via whatsapp</p>
+                        </div>
+                        
+                        <div class="payment-info" id="debitInfo">
+                            <h4>Pagamento com Cartão de Débito</h4>
+                            <p>O cartão será processado na entrega pela maquininha do entregador.</p>
+                        </div>
+                        
+                        <div class="payment-info" id="creditInfo">
+                            <h4>Pagamento com Cartão de Crédito</h4>
+                            <p>O cartão será processado na entrega pela maquininha do entregador.</p>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="nextToConfirmBtn">Continuar para Confirmação</button>
+                    <button class="btn btn-secondary" id="backToDeliveryBtn">Voltar para Entrega</button>
+                </div>
+                
+                <!-- Confirmação do pedido -->
+                <div id="confirmationSection" style="display: none;">
+                    <div class="form-section">
+                        <h3>Confirmação do Pedido</h3>
+                        <p>Revise os dados do seu pedido antes de finalizar:</p>
+                        
+                        <div id="orderSummary">
+                            <!-- Resumo do pedido será inserido aqui -->
+                        </div>
+                        
+                        <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" id="confirmTerms">
+                            <label for="confirmTerms" style="margin: 0;">Confirmo que os dados estão corretos</label>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="confirmOrderBtn">Confirmar Pedido</button>
+                    <button class="btn btn-secondary" id="backToPaymentBtn">Voltar para Pagamento</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmação -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content fade-in">
+            <div class="modal-header">
+                <h3>Pedido Confirmado!</h3>
+                <button class="close-modal" id="closeConfirmationModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center; padding: 20px 0;">
+                    <i class="fas fa-check-circle" style="font-size: 4rem; color: var(--secondary); margin-bottom: 20px;"></i>
+                    <h3>O entregador entregará em breve!</h3>
+                    <p>Seu pedido foi registrado com sucesso e já está sendo preparado.</p>
+                    <p>Em instantes você será redirecionado para o WhatsApp para receber o recibo do pedido.</p>
+                    <p id="whatsappRedirect" style="font-size: 0.9rem; color: var(--light); margin-top: 20px; opacity: 0.8;">Redirecionando em <span id="countdown">4</span> segundos...</p>
+                    
+                    <button class="btn btn-primary" id="whatsappBtn" style="margin-top: 20px;">
+                        <i class="fab fa-whatsapp"></i> Abrir WhatsApp Agora
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Drogaria Paradiso</h3>
+                    <p>Sua farmácia de confiança no bairro, com entrega rápida e atendimento personalizado.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contato</h3>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-phone"></i> (21) 3456-7890</li>
+                        <li><i class="fas fa-mobile-alt"></i> (21) 97577-5550</li>
+                        <li><i class="fas fa-clock"></i> Seg-Sex: 8h-20h, Sáb: 8h-18h</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Rua das Flores, 123 - Centro</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Formas de Pagamento</h3>
+                    <p>Aceitamos todas as principais formas de pagamento na entrega.</p>
+                    <div style="display: flex; gap: 10px; margin-top: 10px; font-size: 1.5rem;">
+                        <i class="fas fa-money-bill-wave" title="Dinheiro"></i>
+                        <i class="fas fa-qrcode" title="PIX"></i>
+                        <i class="fas fa-credit-card" title="Cartão"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dados dos produtos organizados por categoria
+        const products = [
+            // Medicamentos
+            { id: 1, name: "Paracetamol 500mg", price: 12.90, category: "Medicamentos", image: "imagens/paracetamol.jpg" },
+            { id: 2, name: "Dipirona Sódica 500mg", price: 8.50, category: "Medicamentos", image: "imagens/dipirona.jpg" },
+            { id: 3, name: "Ibuprofeno 400mg", price: 15.90, category: "Medicamentos", image: "imagens/ibuprofeno.jpg" },
+            { id: 4, name: "Omeprazol 20mg", price: 22.50, category: "Medicamentos", image: "imagens/omeprazol.jpg" },
+            { id: 5, name: "Loratadina 10mg", price: 18.90, category: "Medicamentos", image: "imagens/loratadina.jpg" },
+            
+            // Higiene Pessoal
+            { id: 6, name: "Sabonete Dove 90g", price: 4.90, category: "Higiene", image: "imagens/sabonete.jpg" },
+            { id: 7, name: "Shampoo Anticaspa", price: 24.90, category: "Higiene", image: "imagens/shampoo.jpg" },
+            { id: 8, name: "Creme Dental Colgate 90g", price: 6.90, category: "Higiene", image: "imagens/creme-dental.jpg" },
+            { id: 9, name: "Desodorante Rexona", price: 14.90, category: "Higiene", image: "imagens/desodorante.jpg" },
+            
+            // Beleza e Cuidados
+            { id: 10, name: "Protetor Solar FPS 50", price: 39.90, category: "Beleza", image: "imagens/protetor-solar.jpg" },
+            { id: 11, name: "Hidratante Corporal Nivea", price: 28.90, category: "Beleza", image: "imagens/hidratante.jpg" },
+            { id: 12, name: "Creme para Mãos", price: 16.90, category: "Beleza", image: "imagens/creme-maos.jpg" },
+            
+            // Bebê
+            { id: 13, name: "Fralda Pampers Confort Sec", price: 54.90, category: "Bebê", image: "imagens/fralda.jpg" },
+            { id: 14, name: "Lenço Umedecido Johnson's", price: 19.90, category: "Bebê", image: "imagens/lenco-umedecido.jpg" },
+            { id: 15, name: "Pomada para Assaduras", price: 22.90, category: "Bebê", image: "imagens/pomada-assadura.jpg" },
+            
+            // Vitaminas e Suplementos
+            { id: 16, name: "Vitamina C 500mg", price: 32.90, category: "Vitaminas", image: "imagens/vitamina-c.jpg" },
+            { id: 17, name: "Multivitamínico", price: 45.90, category: "Vitaminas", image: "imagens/multivitaminico.jpg" },
+            { id: 18, name: "Ômega 3 1000mg", price: 58.90, category: "Vitaminas", image: "imagens/omega3.jpg" },
+            
+            // Primeiros Socorros
+            { id: 19, name: "Curativo Band-Aid", price: 12.90, category: "Primeiros Socorros", image: "imagens/curativo.jpg" },
+            { id: 20, name: "Álcool em Gel 70%", price: 18.90, category: "Primeiros Socorros", image: "imagens/alcool-gel.jpg" },
+            { id: 21, name: "Termômetro Digital", price: 32.90, category: "Primeiros Socorros", image: "imagens/termometro.jpg" }
+        ];
+
+        // Categorias disponíveis
+        const categories = ["Todos", "Medicamentos", "Higiene", "Beleza", "Bebê", "Vitaminas", "Primeiros Socorros"];
+
+        // Estado do carrinho
+        let cart = [];
+        let currentStep = 1;
+        let selectedDeliveryOption = null;
+        let selectedPaymentMethod = null;
+        let orderDetails = {};
+        let currentCategory = "Todos";
+        let orderCounter = localStorage.getItem('paradisoOrderCounter') ? parseInt(localStorage.getItem('paradisoOrderCounter')) : 1;
+
+        // Elementos do DOM
+        const cartIcon = document.getElementById('cartIcon');
+        const cartCount = document.getElementById('cartCount');
+        const cartModal = document.getElementById('cartModal');
+        const closeCartModal = document.getElementById('closeCartModal');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const continueShoppingBtn = document.getElementById('continueShoppingBtn');
+        const checkoutModal = document.getElementById('checkoutModal');
+        const closeCheckoutModal = document.getElementById('closeCheckoutModal');
+        const confirmationModal = document.getElementById('confirmationModal');
+        const closeConfirmationModal = document.getElementById('closeConfirmationModal');
+        const productsGrid = document.getElementById('productsGrid');
+        const categoriesContainer = document.getElementById('categoriesContainer');
+        const cartItems = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        const paradisoOption = document.getElementById('paradisoOption');
+        const otherOption = document.getElementById('otherOption');
+        const paradisoForm = document.getElementById('paradisoForm');
+        const otherForm = document.getElementById('otherForm');
+        const nextToPaymentBtn = document.getElementById('nextToPaymentBtn');
+        const deliveryForm = document.getElementById('deliveryForm');
+        const paymentForm = document.getElementById('paymentForm');
+        const backToDeliveryBtn = document.getElementById('backToDeliveryBtn');
+        const nextToConfirmBtn = document.getElementById('nextToConfirmBtn');
+        const confirmationSection = document.getElementById('confirmationSection');
+        const backToPaymentBtn = document.getElementById('backToPaymentBtn');
+        const confirmOrderBtn = document.getElementById('confirmOrderBtn');
+        const step1Icon = document.getElementById('step1Icon');
+        const step2Icon = document.getElementById('step2Icon');
+        const step3Icon = document.getElementById('step3Icon');
+        const orderSummary = document.getElementById('orderSummary');
+        const whatsappBtn = document.getElementById('whatsappBtn');
+        const countdownElement = document.getElementById('countdown');
+        const amountPaidInput = document.getElementById('amountPaid');
+        const changeInfo = document.getElementById('changeInfo');
+        const changeAmount = document.getElementById('changeAmount');
+        const totalAmount = document.getElementById('totalAmount');
+        const fixedCheckoutPopup = document.getElementById('fixedCheckoutPopup');
+        const checkoutFixedBtn = document.getElementById('checkoutFixedBtn');
+
+        // Métodos de pagamento
+        const cashOption = document.getElementById('cashOption');
+        const pixOption = document.getElementById('pixOption');
+        const debitOption = document.getElementById('debitOption');
+        const creditOption = document.getElementById('creditOption');
+        const cashInfo = document.getElementById('cashInfo');
+        const pixInfo = document.getElementById('pixInfo');
+        const debitInfo = document.getElementById('debitInfo');
+        const creditInfo = document.getElementById('creditInfo');
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCategories();
+            renderProducts();
+            loadCartFromStorage();
+            updateCartCount();
+            updateFixedCheckoutPopup();
+            setupEventListeners();
+        });
+
+        // Renderizar categorias
+        function renderCategories() {
+            categoriesContainer.innerHTML = '';
+            categories.forEach(category => {
+                const categoryBtn = document.createElement('button');
+                categoryBtn.className = `category-btn ${category === 'Todos' ? 'active' : ''}`;
+                categoryBtn.textContent = category;
+                categoryBtn.setAttribute('data-category', category);
+                categoryBtn.addEventListener('click', () => filterProductsByCategory(category));
+                categoriesContainer.appendChild(categoryBtn);
+            });
+        }
+
+        // Filtrar produtos por categoria
+        function filterProductsByCategory(category) {
+            currentCategory = category;
+            
+            // Atualizar botões ativos
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.category-btn[data-category="${category}"]`).classList.add('active');
+            
+            renderProducts();
+        }
+
+        // Renderizar produtos
+        function renderProducts() {
+            productsGrid.innerHTML = '';
+            
+            // Filtrar produtos por categoria
+            const filteredProducts = currentCategory === 'Todos' 
+                ? products 
+                : products.filter(product => product.category === currentCategory);
+            
+            if (filteredProducts.length === 0) {
+                productsGrid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--light);">Nenhum produto encontrado nesta categoria.</p>';
+                return;
+            }
+            
+            filteredProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <div class="product-img">
+                        <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMSkiLz4KPHBhdGggZD0iTTUwIDgwTDkwIDEyMEwxMzAgODBMMTcwIDEyMEgyMDBWMTYwSDE3MEwxMzAgMTIwTDkwIDE2MEw1MCAxMjBIMFY4MEg1MFoiIGZpbGw9InJnYmEoMjU1LCAyMTUsIDAsIDAuMykiLz4KPHBhdGggZD0iTTQwIDQwSDE2MFY2MEg0MFY0MFoiIGZpbGw9InJnYmEoMjU1LCAyMTUsIDAsIDAuMykiLz4KPC9zdmc+';">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <div class="product-price">R$ ${product.price.toFixed(2)}</div>
+                        <button class="add-to-cart" data-id="${product.id}">Adicionar ao Carrinho</button>
+                    </div>
+                `;
+                productsGrid.appendChild(productCard);
+            });
+        }
+
+        // Configurar listeners de eventos
+        function setupEventListeners() {
+            // Carrinho
+            cartIcon.addEventListener('click', openCartModal);
+            closeCartModal.addEventListener('click', closeCartModalFunc);
+            continueShoppingBtn.addEventListener('click', closeCartModalFunc);
+            checkoutBtn.addEventListener('click', openCheckoutModal);
+            
+            // Checkout modal
+            closeCheckoutModal.addEventListener('click', closeCheckoutModalFunc);
+            
+            // Confirmação modal
+            closeConfirmationModal.addEventListener('click', closeConfirmationModalFunc);
+            
+            // Produtos - delegar evento para os botões de adicionar ao carrinho
+            productsGrid.addEventListener('click', (e) => {
+                if (e.target.classList.contains('add-to-cart')) {
+                    const productId = parseInt(e.target.getAttribute('data-id'));
+                    addToCart(productId);
+                }
+            });
+            
+            // Carrinho - delegar eventos para os botões de remover/alterar quantidade
+            cartItems.addEventListener('click', (e) => {
+                const target = e.target;
+                const cartItem = target.closest('.cart-item');
+                if (!cartItem) return;
+                
+                const productId = parseInt(cartItem.getAttribute('data-id'));
+                
+                if (target.classList.contains('increase')) {
+                    updateCartItemQuantity(productId, 1);
+                } else if (target.classList.contains('decrease')) {
+                    updateCartItemQuantity(productId, -1);
+                } else if (target.classList.contains('remove-item')) {
+                    removeFromCart(productId);
+                }
+            });
+            
+            // Opções de entrega
+            paradisoOption.addEventListener('click', () => selectDeliveryOption('paradiso'));
+            otherOption.addEventListener('click', () => selectDeliveryOption('other'));
+            
+            // Botões de navegação no checkout
+            nextToPaymentBtn.addEventListener('click', goToPaymentStep);
+            backToDeliveryBtn.addEventListener('click', goToDeliveryStep);
+            nextToConfirmBtn.addEventListener('click', goToConfirmationStep);
+            backToPaymentBtn.addEventListener('click', goToPaymentStepFromConfirmation);
+            confirmOrderBtn.addEventListener('click', confirmOrder);
+            
+            // Opções de pagamento
+            cashOption.addEventListener('click', () => selectPaymentMethod('cash'));
+            pixOption.addEventListener('click', () => selectPaymentMethod('pix'));
+            debitOption.addEventListener('click', () => selectPaymentMethod('debit'));
+            creditOption.addEventListener('click', () => selectPaymentMethod('credit'));
+            
+            // Calcular troco quando o valor pago for alterado
+            amountPaidInput.addEventListener('input', calculateChange);
+            
+            // WhatsApp
+            whatsappBtn.addEventListener('click', sendWhatsAppMessage);
+            
+            // Botão do pop-up fixo
+            checkoutFixedBtn.addEventListener('click', openCheckoutModal);
+        }
+
+        // Atualizar pop-up fixo
+        function updateFixedCheckoutPopup() {
+            if (cart.length > 0) {
+                fixedCheckoutPopup.classList.add('show');
+            } else {
+                fixedCheckoutPopup.classList.remove('show');
+            }
+        }
+
+        // Funções do carrinho
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1
+                });
+            }
+            
+            updateCartCount();
+            saveCartToStorage();
+            updateFixedCheckoutPopup();
+            showCenteredNotification(`${product.name} adicionado ao carrinho!`);
+        }
+
+        function updateCartItemQuantity(productId, change) {
+            const itemIndex = cart.findIndex(item => item.id === productId);
+            if (itemIndex === -1) return;
+            
+            cart[itemIndex].quantity += change;
+            
+            if (cart[itemIndex].quantity <= 0) {
+                cart.splice(itemIndex, 1);
+            }
+            
+            updateCartCount();
+            saveCartToStorage();
+            renderCartItems();
+            updateFixedCheckoutPopup();
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartCount();
+            saveCartToStorage();
+            renderCartItems();
+            updateFixedCheckoutPopup();
+        }
+
+        function updateCartCount() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+        }
+
+        function saveCartToStorage() {
+            localStorage.setItem('paradisoCart', JSON.stringify(cart));
+        }
+
+        function loadCartFromStorage() {
+            const savedCart = localStorage.getItem('paradisoCart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+            }
+        }
+
+        function renderCartItems() {
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--light);">Seu carrinho está vazio</p>';
+                cartTotal.textContent = 'R$ 0,00';
+                return;
+            }
+            
+            let itemsHTML = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                itemsHTML += `
+                    <div class="cart-item" data-id="${item.id}">
+                        <div class="cart-item-info">
+                            <h4>${item.name}</h4>
+                            <div class="cart-item-price">R$ ${item.price.toFixed(2)}</div>
+                        </div>
+                        <div class="cart-item-controls">
+                            <button class="decrease">-</button>
+                            <span style="color: var(--light);">${item.quantity}</span>
+                            <button class="increase">+</button>
+                            <button class="remove-item" style="margin-left: 10px; color: var(--secondary); background: none;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            cartItems.innerHTML = itemsHTML;
+            cartTotal.textContent = `R$ ${total.toFixed(2)}`;
+        }
+
+        function showCenteredNotification(message) {
+            // Remover notificações anteriores
+            const existingNotifications = document.querySelectorAll('.centered-notification');
+            existingNotifications.forEach(notification => {
+                document.body.removeChild(notification);
+            });
+            
+            // Criar elemento de notificação centralizada
+            const notification = document.createElement('div');
+            notification.className = 'centered-notification';
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Remover após 3 segundos
+            setTimeout(() => {
+                notification.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Funções dos modais
+        function openCartModal() {
+            if (cart.length === 0) {
+                showCenteredNotification('Seu carrinho está vazio!');
+                return;
+            }
+            
+            renderCartItems();
+            cartModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCartModalFunc() {
+            cartModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function openCheckoutModal() {
+            if (cart.length === 0) {
+                showCenteredNotification('Adicione produtos ao carrinho antes de finalizar!');
+                return;
+            }
+            
+            closeCartModalFunc();
+            checkoutModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            resetCheckoutSteps();
+        }
+
+        function closeCheckoutModalFunc() {
+            checkoutModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function closeConfirmationModalFunc() {
+            confirmationModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Funções do checkout
+        function selectDeliveryOption(option) {
+            selectedDeliveryOption = option;
+            
+            // Atualizar visual das opções
+            paradisoOption.classList.remove('selected');
+            otherOption.classList.remove('selected');
+            
+            if (option === 'paradiso') {
+                paradisoOption.classList.add('selected');
+                paradisoForm.style.display = 'block';
+                otherForm.style.display = 'none';
+            } else {
+                otherOption.classList.add('selected');
+                paradisoForm.style.display = 'none';
+                otherForm.style.display = 'block';
+            }
+        }
+
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+            
+            // Remover seleção de todos
+            cashOption.classList.remove('selected');
+            pixOption.classList.remove('selected');
+            debitOption.classList.remove('selected');
+            creditOption.classList.remove('selected');
+            
+            // Esconder todas as informações de pagamento
+            cashInfo.classList.remove('show');
+            pixInfo.classList.remove('show');
+            debitInfo.classList.remove('show');
+            creditInfo.classList.remove('show');
+            
+            // Selecionar o método correto
+            if (method === 'cash') {
+                cashOption.classList.add('selected');
+                cashInfo.classList.add('show');
+                
+                // Atualizar total exibido
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                totalAmount.textContent = `R$ ${total.toFixed(2)}`;
+                
+                // Limpar campo de valor pago e esconder troco
+                amountPaidInput.value = '';
+                changeInfo.style.display = 'none';
+            } else if (method === 'pix') {
+                pixOption.classList.add('selected');
+                pixInfo.classList.add('show');
+            } else if (method === 'debit') {
+                debitOption.classList.add('selected');
+                debitInfo.classList.add('show');
+            } else if (method === 'credit') {
+                creditOption.classList.add('selected');
+                creditInfo.classList.add('show');
+            }
+        }
+
+        // Calcular troco
+        function calculateChange() {
+            const amountPaid = parseFloat(amountPaidInput.value);
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            if (amountPaid >= total && !isNaN(amountPaid)) {
+                const change = amountPaid - total;
+                changeAmount.textContent = `R$ ${change.toFixed(2)}`;
+                changeInfo.style.display = 'block';
+            } else {
+                changeInfo.style.display = 'none';
+            }
+        }
+
+        function resetCheckoutSteps() {
+            currentStep = 1;
+            selectedDeliveryOption = null;
+            selectedPaymentMethod = null;
+            
+            // Resetar formulários
+            paradisoOption.classList.remove('selected');
+            otherOption.classList.remove('selected');
+            paradisoForm.style.display = 'none';
+            otherForm.style.display = 'none';
+            
+            // Resetar seleção de pagamento
+            cashOption.classList.remove('selected');
+            pixOption.classList.remove('selected');
+            debitOption.classList.remove('selected');
+            creditOption.classList.remove('selected');
+            
+            cashInfo.classList.remove('show');
+            pixInfo.classList.remove('show');
+            debitInfo.classList.remove('show');
+            creditInfo.classList.remove('show');
+            
+            // Limpar campo de valor pago
+            amountPaidInput.value = '';
+            changeInfo.style.display = 'none';
+            
+            // Mostrar apenas o formulário de entrega
+            deliveryForm.style.display = 'block';
+            paymentForm.style.display = 'none';
+            confirmationSection.style.display = 'none';
+            
+            // Atualizar indicadores de etapa
+            updateStepIndicators();
+        }
+
+        function updateStepIndicators() {
+            step1Icon.classList.remove('active');
+            step2Icon.classList.remove('active');
+            step3Icon.classList.remove('active');
+            
+            if (currentStep >= 1) step1Icon.classList.add('active');
+            if (currentStep >= 2) step2Icon.classList.add('active');
+            if (currentStep >= 3) step3Icon.classList.add('active');
+        }
+
+        function goToPaymentStep() {
+            // Validar formulário de entrega
+            if (!selectedDeliveryOption) {
+                showCenteredNotification('Selecione uma opção de entrega!');
+                return;
+            }
+            
+            let isValid = true;
+            
+            if (selectedDeliveryOption === 'paradiso') {
+                const name = document.getElementById('paradisoName').value.trim();
+                const phone = document.getElementById('paradisoPhone').value.trim();
+                const garden = document.getElementById('paradisoGarden').value.trim();
+                const house = document.getElementById('paradisoHouse').value.trim();
+                
+                if (!name || !phone || !garden || !house) {
+                    showCenteredNotification('Preencha todos os campos obrigatórios!');
+                    isValid = false;
+                }
+                
+                // Formatar telefone para WhatsApp (remover caracteres não numéricos e adicionar código 55)
+                let formattedPhone = phone.replace(/\D/g, '');
+                
+                // Remover o zero inicial se houver (para números com DDD começando com 0)
+                if (formattedPhone.length === 11 && formattedPhone.charAt(0) === '0') {
+                    formattedPhone = formattedPhone.substring(1);
+                }
+                
+                // Adicionar código do Brasil (55) se não estiver presente
+                if (!formattedPhone.startsWith('55')) {
+                    formattedPhone = '55' + formattedPhone;
+                }
+                
+                // Salvar dados para o resumo
+                orderDetails.delivery = {
+                    option: 'Condomínio Paradiso',
+                    name: name,
+                    phone: phone, // Número formatado para exibição
+                    whatsappPhone: formattedPhone, // Número formatado para WhatsApp
+                    garden: garden,
+                    house: house
+                };
+            } else {
+                const name = document.getElementById('otherName').value.trim();
+                const phone = document.getElementById('otherPhone').value.trim();
+                const street = document.getElementById('otherStreet').value.trim();
+                const number = document.getElementById('otherNumber').value.trim();
+                const neighborhood = document.getElementById('otherNeighborhood').value.trim();
+                const complement = document.getElementById('otherComplement').value.trim();
+                const reference = document.getElementById('otherReference').value.trim();
+                
+                if (!name || !phone || !street || !number || !neighborhood) {
+                    showCenteredNotification('Preencha todos os campos obrigatórios!');
+                    isValid = false;
+                }
+                
+                // Formatar telefone para WhatsApp (remover caracteres não numéricos e adicionar código 55)
+                let formattedPhone = phone.replace(/\D/g, '');
+                
+                // Remover o zero inicial se houver (para números com DDD começando com 0)
+                if (formattedPhone.length === 11 && formattedPhone.charAt(0) === '0') {
+                    formattedPhone = formattedPhone.substring(1);
+                }
+                
+                // Adicionar código do Brasil (55) se não estiver presente
+                if (!formattedPhone.startsWith('55')) {
+                    formattedPhone = '55' + formattedPhone;
+                }
+                
+                // Salvar dados para o resumo
+                orderDetails.delivery = {
+                    option: 'Outro Bairro',
+                    name: name,
+                    phone: phone, // Número formatado para exibição
+                    whatsappPhone: formattedPhone, // Número formatado para WhatsApp
+                    street: street,
+                    number: number,
+                    neighborhood: neighborhood,
+                    complement: complement,
+                    reference: reference
+                };
+            }
+            
+            if (!isValid) return;
+            
+            // Avançar para o passo de pagamento
+            currentStep = 2;
+            deliveryForm.style.display = 'none';
+            paymentForm.style.display = 'block';
+            updateStepIndicators();
+        }
+
+        function goToDeliveryStep() {
+            currentStep = 1;
+            paymentForm.style.display = 'none';
+            deliveryForm.style.display = 'block';
+            updateStepIndicators();
+        }
+
+        function goToPaymentStepFromConfirmation() {
+            currentStep = 2;
+            confirmationSection.style.display = 'none';
+            paymentForm.style.display = 'block';
+            updateStepIndicators();
+        }
+
+        function goToConfirmationStep() {
+            // Validar forma de pagamento
+            if (!selectedPaymentMethod) {
+                showCenteredNotification('Selecione uma forma de pagamento!');
+                return;
+            }
+            
+            // Validar campo de valor pago se for dinheiro
+            if (selectedPaymentMethod === 'cash') {
+                const amountPaid = parseFloat(amountPaidInput.value);
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                
+                if (!amountPaid || amountPaid <= 0) {
+                    showCenteredNotification('Informe o valor que será pago!');
+                    return;
+                }
+                
+                if (amountPaid < total) {
+                    showCenteredNotification('O valor pago não pode ser menor que o total do pedido!');
+                    return;
+                }
+                
+                // Salvar informações de troco
+                orderDetails.change = (amountPaid - total).toFixed(2);
+                orderDetails.amountPaid = amountPaid.toFixed(2);
+            }
+            
+            // Salvar dados de pagamento
+            orderDetails.payment = selectedPaymentMethod;
+            
+            currentStep = 3;
+            paymentForm.style.display = 'none';
+            confirmationSection.style.display = 'block';
+            updateStepIndicators();
+            
+            // Gerar resumo do pedido
+            renderOrderSummary();
+        }
+
+        function renderOrderSummary() {
+            let total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            let summaryHTML = `
+                <h4 style="color: var(--secondary);">Itens do Pedido:</h4>
+                <ul style="margin-bottom: 20px; padding-left: 20px; color: var(--light);">
+            `;
+            
+            cart.forEach(item => {
+                summaryHTML += `<li>${item.quantity}x ${item.name} - R$ ${(item.price * item.quantity).toFixed(2)}</li>`;
+            });
+            
+            summaryHTML += `</ul>`;
+            summaryHTML += `<p style="color: var(--light);"><strong>Total: R$ ${total.toFixed(2)}</strong></p>`;
+            
+            summaryHTML += `<h4 style="margin-top: 20px; color: var(--secondary);">Informações de Entrega:</h4>`;
+            
+            if (orderDetails.delivery.option === 'Condomínio Paradiso') {
+                summaryHTML += `
+                    <p style="color: var(--light);"><strong>Local:</strong> Condomínio Paradiso</p>
+                    <p style="color: var(--light);"><strong>Nome:</strong> ${orderDetails.delivery.name}</p>
+                    <p style="color: var(--light);"><strong>Celular:</strong> ${orderDetails.delivery.phone}</p>
+                    <p style="color: var(--light);"><strong>Jardim:</strong> ${orderDetails.delivery.garden}</p>
+                    <p style="color: var(--light);"><strong>Casa:</strong> ${orderDetails.delivery.house}</p>
+                `;
+            } else {
+                summaryHTML += `
+                    <p style="color: var(--light);"><strong>Local:</strong> Outro Bairro</p>
+                    <p style="color: var(--light);"><strong>Nome:</strong> ${orderDetails.delivery.name}</p>
+                    <p style="color: var(--light);"><strong>Celular:</strong> ${orderDetails.delivery.phone}</p>
+                    <p style="color: var(--light);"><strong>Endereço:</strong> ${orderDetails.delivery.street}, ${orderDetails.delivery.number}</p>
+                    <p style="color: var(--light);"><strong>Bairro:</strong> ${orderDetails.delivery.neighborhood}</p>
+                `;
+                
+                if (orderDetails.delivery.complement) {
+                    summaryHTML += `<p style="color: var(--light);"><strong>Complemento:</strong> ${orderDetails.delivery.complement}</p>`;
+                }
+                
+                if (orderDetails.delivery.reference) {
+                    summaryHTML += `<p style="color: var(--light);"><strong>Ponto de Referência:</strong> ${orderDetails.delivery.reference}</p>`;
+                }
+            }
+            
+            summaryHTML += `<h4 style="margin-top: 20px; color: var(--secondary);">Forma de Pagamento:</h4>`;
+            
+            let paymentText = '';
+            switch(orderDetails.payment) {
+                case 'cash':
+                    paymentText = `Dinheiro (Valor pago: R$ ${orderDetails.amountPaid}, Troco: R$ ${orderDetails.change})`;
+                    break;
+                case 'pix':
+                    paymentText = 'PIX (Chave: XX XXXXX-XXXX)';
+                    break;
+                case 'debit':
+                    paymentText = 'Cartão de Débito';
+                    break;
+                case 'credit':
+                    paymentText = 'Cartão de Crédito';
+                    break;
+            }
+            
+            summaryHTML += `<p style="color: var(--light);">${paymentText}</p>`;
+            
+            orderSummary.innerHTML = summaryHTML;
+        }
+
+        function confirmOrder() {
+            // Verificar se os termos foram aceitos
+            const confirmTerms = document.getElementById('confirmTerms');
+            if (!confirmTerms.checked) {
+                showCenteredNotification('Você precisa confirmar que os dados estão corretos!');
+                return;
+            }
+            
+            // Fechar modal de checkout
+            closeCheckoutModalFunc();
+            
+            // Abrir modal de confirmação
+            confirmationModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Iniciar contagem regressiva para WhatsApp
+            startWhatsAppCountdown();
+        }
+
+        function startWhatsAppCountdown() {
+            let countdown = 4;
+            countdownElement.textContent = countdown;
+            
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    sendWhatsAppMessage();
+                }
+            }, 1000);
+        }
+
+        function sendWhatsAppMessage() {
+            // Incrementar contador de pedidos
+            orderCounter++;
+            localStorage.setItem('paradisoOrderCounter', orderCounter);
+            
+            // Calcular total
+            let total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            // Criar mensagem para WhatsApp
+            let message = `*PEDIDO ${orderCounter} - Drogaria Paradiso*%0A%0A`;
+            message += `*Itens do Pedido:*%0A`;
+            
+            cart.forEach(item => {
+                message += `- ${item.quantity}x ${item.name} - R$ ${(item.price * item.quantity).toFixed(2)}%0A`;
+            });
+            
+            message += `%0A*Total: R$ ${total.toFixed(2)}*%0A%0A`;
+            message += `*Informações de Entrega:*%0A`;
+            
+            if (orderDetails.delivery.option === 'Condomínio Paradiso') {
+                message += `Condomínio Paradiso%0A`;
+                message += `Nome: ${orderDetails.delivery.name}%0A`;
+                message += `Celular: ${orderDetails.delivery.phone}%0A`;
+                message += `Jardim: ${orderDetails.delivery.garden}%0A`;
+                message += `Casa: ${orderDetails.delivery.house}%0A`;
+            } else {
+                message += `Outro Bairro%0A`;
+                message += `Nome: ${orderDetails.delivery.name}%0A`;
+                message += `Celular: ${orderDetails.delivery.phone}%0A`;
+                message += `Endereço: ${orderDetails.delivery.street}, ${orderDetails.delivery.number}%0A`;
+                message += `Bairro: ${orderDetails.delivery.neighborhood}%0A`;
+                
+                if (orderDetails.delivery.complement) {
+                    message += `Complemento: ${orderDetails.delivery.complement}%0A`;
+                }
+                
+                if (orderDetails.delivery.reference) {
+                    message += `Ponto de Referência: ${orderDetails.delivery.reference}%0A`;
+                }
+            }
+            
+            message += `%0A*Forma de Pagamento:*%0A`;
+            
+            let paymentText = '';
+            switch(orderDetails.payment) {
+                case 'cash':
+                    paymentText = `Dinheiro (Valor pago: R$ ${orderDetails.amountPaid}, Troco: R$ ${orderDetails.change})`;
+                    break;
+                case 'pix':
+                    paymentText = 'PIX (Chave: XX XXXXX-XXXX)';
+                    break;
+                case 'debit':
+                    paymentText = 'Cartão de Débito';
+                    break;
+                case 'credit':
+                    paymentText = 'Cartão de Crédito';
+                    break;
+            }
+            
+            message += `${paymentText}%0A%0A`;
+            message += `*Pagamento na entrega.*%0A`;
+            message += `*Envie o comprovante do PIX via WhatsApp após o pagamento.*%0A`;
+            message += `Obrigado pela preferência!`;
+            
+            // Usar o número do cliente (já formatado com código 55)
+            const phoneNumber = orderDetails.delivery.whatsappPhone;
+            
+            // Abrir WhatsApp com a mensagem pré-preenchida
+            // O usuário precisará clicar em "enviar" manualmente
+            window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+            
+            // Limpar carrinho após envio
+            cart = [];
+            updateCartCount();
+            saveCartToStorage();
+            updateFixedCheckoutPopup();
+            
+            // Fechar modal após 3 segundos
+            setTimeout(() => {
+                closeConfirmationModalFunc();
+                showCenteredNotification('WhatsApp aberto! Confirme o envio do recibo.');
+            }, 3000);
+        }
+
+        // Fechar modais ao clicar fora
+        window.addEventListener('click', (e) => {
+            if (e.target === cartModal) {
+                closeCartModalFunc();
+            }
+            if (e.target === checkoutModal) {
+                closeCheckoutModalFunc();
+            }
+            if (e.target === confirmationModal) {
+                closeConfirmationModalFunc();
+            }
+        });
+    </script>
+</body>
+</html>
